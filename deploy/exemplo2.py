@@ -98,6 +98,6 @@ if __name__ == "__main__":
     agent_os.serve(
         app="exemplo2:app",
         host="0.0.0.0",
-        port=7777,
+        port=10000,
         reload=True,
     )
