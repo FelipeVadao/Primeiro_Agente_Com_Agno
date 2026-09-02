@@ -3,7 +3,7 @@ from agno.db.sqlite import SqliteDb
 from agno.models.anthropic import Claude
 from agno.knowledge.reader.pdf_reader import PDFReader
 from agno.knowledge.knowledge import Knowledge
-from agno.knowledge.embedder.fastembed import FastEmbedEmbedder
+from agno.knowledge.embedder.openai import OpenAIEmbedder
 from agno.vectordb.chroma import ChromaDb
 from agno.os import AgentOS
 
@@ -22,8 +22,8 @@ vector_db = ChromaDb(
     collection="pdf_agent",
     path="tmp/chromadb",
     persistent_client=True,
-    embedder=FastEmbedEmbedder(
-        id="BAAI/bge-small-en-v1.5"
+    embedder=OpenAIEmbedder(
+        id="text-embedding-3-small"
     ),
 )
 
@@ -50,12 +50,10 @@ db = SqliteDb(
 
 agent = Agent(
     name="Agente de PDF",
-
     model=Claude(
         id="claude-sonnet-4-5",
         api_key=os.getenv("ANTHROPIC_API_KEY"),
     ),
-
     db=db,
     knowledge=knowledge,
     add_history_to_context=True,
@@ -79,21 +77,18 @@ app = agent_os.get_app()
 
 if __name__ == "__main__":
 
-    # asyncio.run(
-    #     knowledge.ainsert(
-    #         url="https://s3.sa-east-1.amazonaws.com/static.grendene.aatb.com.br/releases/2417_2T25.pdf",
-  
-    #         metadata={
-    #             "source": "Grendene",
-    #             "type": "pdf",
-    #             "description": "Relatório Trimestral 2T25",
-    #         },
-
-    #           skip_if_exists=True,
-
-    #         reader=PDFReader(),
-    #     )
-    # )
+    asyncio.run(
+        knowledge.ainsert(
+            url="https://s3.sa-east-1.amazonaws.com/static.grendene.aatb.com.br/releases/2417_2T25.pdf",
+            metadata={
+                "source": "Grendene",
+                "type": "pdf",
+                "description": "Relatório Trimestral 2T25",
+            },
+            skip_if_exists=True,
+            reader=PDFReader(),
+        )
+    )
 
     agent_os.serve(
         app="exemplo2:app",
