@@ -79,21 +79,21 @@ app = agent_os.get_app()
 
 if __name__ == "__main__":
 
-    asyncio.run(
-        knowledge.ainsert(
-            url="https://s3.sa-east-1.amazonaws.com/static.grendene.aatb.com.br/releases/2417_2T25.pdf",
+    # asyncio.run(
+    #     knowledge.ainsert(
+    #         url="https://s3.sa-east-1.amazonaws.com/static.grendene.aatb.com.br/releases/2417_2T25.pdf",
   
-            metadata={
-                "source": "Grendene",
-                "type": "pdf",
-                "description": "Relatório Trimestral 2T25",
-            },
+    #         metadata={
+    #             "source": "Grendene",
+    #             "type": "pdf",
+    #             "description": "Relatório Trimestral 2T25",
+    #         },
 
-              skip_if_exists=True,
+    #           skip_if_exists=True,
 
-            reader=PDFReader(),
-        )
-    )
+    #         reader=PDFReader(),
+    #     )
+    # )
 
     agent_os.serve(
         app="exemplo2:app",
