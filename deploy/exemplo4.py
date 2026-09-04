@@ -4,32 +4,35 @@ import json
 import streamlit as st
 
 AGENT_ID = "agente-de-pdf"
-ENDPOINT = f'http://localhost:7777/agents/{AGENT_ID}/runs'
+ENDPOINT = f'https://agno-api-tz9e.onrender.com/agents/{AGENT_ID}/runs'
 
 
 # 2 - Conexão com o Agno (SERVER) ===================================================
 
-def get_response_stream(message: str):
+def get_response_stream(*message: str):
+
     response = requests.post(
         url=ENDPOINT,
         data={
             "message": message,
             "stream": True,
         },
-        stream=True
+        stream=True,
+        timeout=120,
     )
     
     # 2.1 - Streaming (processamento) =====================================================
+    response.raise_for_status()
+
     for line in response.iter_lines():
-        if line:
-            # Parse Server-Sent Events
-            if line.startswith(b'data: '):
-                data = line[6:]  # Remove the 'data: ' prefix
-                try:
-                    event = json.loads(data)
-                    yield event
-                except json.JSONDecodeError:
-                    continue
+        if line and line.startswith(b"data: "):
+            data = line[6:]
+
+            try:
+                event = json.loads(data)
+                yield event
+            except json.JSONDecodeError:
+                continue
 
 # 3 - Streamlit =============================================================
 st.set_page_config(page_title="Agente Chat PDF")
