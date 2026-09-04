@@ -3,7 +3,7 @@ from agno.db.sqlite import SqliteDb
 from agno.models.anthropic import Claude
 from agno.knowledge.reader.pdf_reader import PDFReader
 from agno.knowledge.knowledge import Knowledge
-from agno.knowledge.embedder.openai import OpenAIEmbedder
+from agno.knowledge.embedder.fastembed import FastEmbedEmbedder
 from agno.vectordb.chroma import ChromaDb
 from agno.os import AgentOS
 
@@ -22,8 +22,8 @@ vector_db = ChromaDb(
     collection="pdf_agent",
     path="tmp/chromadb",
     persistent_client=True,
-    embedder=OpenAIEmbedder(
-        id="text-embedding-3-small"
+    embedder=FastEmbedEmbedder(
+        id="BAAI/bge-small-en-v1.5"
     ),
 )
 

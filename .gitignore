@@ -14,7 +14,6 @@ wheels/
 __pycache__/
 *.pyc
 
-tmp/
-*.db
-*.db-shm
-*.db-wal
+tmp/*
+!tmp/chromadb/
+!tmp/chromadb/**
